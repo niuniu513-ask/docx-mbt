@@ -1,0 +1,195 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "niuniu513/docx-mbt/ooxml"
+
+import {
+  "moonbitlang/core/archive/zip",
+  "niuniu513/docx-mbt/xml",
+}
+
+// Values
+pub fn detach(@xml.Element, @xml.Element) -> Bool
+
+pub fn emu_to_cm(Int32) -> Double
+
+pub fn emu_to_pt(Int32) -> Double
+
+pub fn fiftieth_cm_to_cm(Int32) -> Double
+
+pub fn fmt(Double, Int32) -> String
+
+pub fn gather_text(@xml.Element, StringBuilder) -> Unit
+
+pub fn half_points_to_pt(Int32) -> Double
+
+pub fn ooxml_flag(@xml.Element) -> Bool
+
+pub let part_document : String
+
+pub let part_numbering : String
+
+pub let part_styles : String
+
+pub fn read_para_props(@xml.Element?) -> ParaProps
+
+pub fn read_run_props(@xml.Element?) -> RunProps
+
+pub fn twips_to_cm(Int32) -> Double
+
+pub fn twips_to_pt(Int32) -> Double
+
+// Errors
+pub suberror DocxError {
+  DocxError(String)
+}
+
+// Types and methods
+pub(all) enum Block {
+  Para(Paragraph)
+  Tbl(Table)
+}
+
+pub struct Docx {
+  pkg : WordPackage
+  doc : @xml.Document
+  styles : StyleTable
+}
+pub fn Docx::blocks(Self) -> Array[Block]
+pub fn Docx::body(Self) -> @xml.Element
+pub fn Docx::body_paragraphs(Self) -> Array[Paragraph]
+pub fn Docx::open(Bytes) -> Self raise DocxError
+pub fn Docx::package(Self) -> WordPackage
+pub fn Docx::paragraphs(Self) -> Array[Paragraph]
+pub fn Docx::root(Self) -> @xml.Element
+pub fn Docx::save(Self) -> Bytes raise DocxError
+pub fn Docx::styles(Self) -> StyleTable
+pub fn Docx::tables(Self) -> Array[Table]
+pub fn Docx::text(Self) -> String
+
+pub struct ParaProps {
+  style_id : String?
+  alignment : String?
+  outline_level : Int32?
+  left_twips : Int32?
+  right_twips : Int32?
+  first_line_twips : Int32?
+  hanging_twips : Int32?
+  space_before_twips : Int32?
+  space_after_twips : Int32?
+  line_twips : Int32?
+  line_rule : String?
+  num_id : String?
+  ilvl : Int32?
+  keep_next : Bool?
+  page_break_before : Bool?
+  contextual_spacing : Bool?
+}
+pub fn ParaProps::none() -> Self
+pub fn ParaProps::over(Self, Self) -> Self
+
+pub struct Paragraph {
+  el : @xml.Element
+  styles : StyleTable
+}
+pub fn Paragraph::direct_props(Self) -> ParaProps
+pub fn Paragraph::element(Self) -> @xml.Element
+pub fn Paragraph::heading_level(Self) -> Int32?
+pub fn Paragraph::is_empty(Self) -> Bool
+pub fn Paragraph::is_list_item(Self) -> Bool
+pub fn Paragraph::left_twips(Self) -> Int32
+pub fn Paragraph::new(@xml.Element, StyleTable) -> Self
+pub fn Paragraph::props(Self) -> ParaProps
+pub fn Paragraph::runs(Self) -> Array[Run]
+pub fn Paragraph::style(Self) -> Style?
+pub fn Paragraph::style_id(Self) -> String?
+pub fn Paragraph::text(Self) -> String
+
+pub struct Run {
+  el : @xml.Element
+  styles : StyleTable
+  para_props : ParaProps
+}
+pub fn Run::char_style_id(Self) -> String?
+pub fn Run::element(Self) -> @xml.Element
+pub fn Run::is_textless(Self) -> Bool
+pub fn Run::new(@xml.Element, StyleTable, ParaProps) -> Self
+pub fn Run::props(Self) -> RunProps
+pub fn Run::set_text(Self, String) -> Unit
+pub fn Run::text(Self) -> String
+
+pub struct RunProps {
+  bold : Bool?
+  italic : Bool?
+  underline : Bool?
+  strike : Bool?
+  font_ascii : String?
+  font_east_asia : String?
+  font_hansi : String?
+  font_cs : String?
+  size_pt : Double?
+  color : String?
+  highlight : String?
+  vert_align : String?
+  char_spacing_pt : Double?
+}
+pub fn RunProps::none() -> Self
+pub fn RunProps::over(Self, Self) -> Self
+
+pub struct Style {
+  id : String
+  name : String
+  kind : String
+  based_on : String?
+  next : String?
+  is_default : Bool
+  para : ParaProps
+  run : RunProps
+}
+pub fn Style::heading_level(Self) -> Int32?
+
+pub struct StyleTable {
+  styles : Map[String, Style]
+  by_name : Map[String, String]
+  default_para : String?
+  default_char : String?
+  default_table : String?
+  doc_run : RunProps
+  doc_para : ParaProps
+}
+pub fn StyleTable::all(Self) -> Array[Style]
+pub fn StyleTable::count(Self) -> Int32
+pub fn StyleTable::default_paragraph_style(Self) -> String?
+pub fn StyleTable::doc_para(Self) -> ParaProps
+pub fn StyleTable::doc_run(Self) -> RunProps
+pub fn StyleTable::empty() -> Self
+pub fn StyleTable::get(Self, String) -> Style?
+pub fn StyleTable::get_by_name(Self, String) -> Style?
+pub fn StyleTable::parse(String) -> Self raise @xml.XmlError
+pub fn StyleTable::resolve_para(Self, String?) -> ParaProps
+pub fn StyleTable::resolve_run(Self, String?) -> RunProps
+
+pub struct Table {
+  el : @xml.Element
+  styles : StyleTable
+}
+pub fn Table::col_count(Self) -> Int32
+pub fn Table::element(Self) -> @xml.Element
+pub fn Table::grid(Self) -> Array[Array[String]]
+pub fn Table::row_count(Self) -> Int32
+pub fn Table::style_id(Self) -> String?
+
+pub struct WordPackage {
+  archive : @zip.Archive
+}
+pub fn WordPackage::has_part(Self, String) -> Bool
+pub fn WordPackage::open(Bytes) -> Self raise DocxError
+pub fn WordPackage::part_bytes(Self, String) -> Bytes?
+pub fn WordPackage::part_count(Self) -> Int32
+pub fn WordPackage::part_text(Self, String) -> String? raise DocxError
+pub fn WordPackage::parts(Self) -> Array[String]
+pub fn WordPackage::save(Self) -> Bytes raise DocxError
+pub fn WordPackage::set_part(Self, String, Bytes) -> Unit
+pub fn WordPackage::set_part_text(Self, String, String) -> Unit
+
+// Type aliases
+
+// Traits
