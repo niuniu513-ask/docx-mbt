@@ -535,6 +535,59 @@ fn compute_issues(
       manual_count,
     ))
   }
+  // Paragraphs that only *look* like headings: centered, bold, short, but
+  // carrying a body style. Everything downstream that trusts structure rather
+  // than appearance (navigation pane, automatic TOC, outline export) misses them.
+  let mut fake_count = 0
+  let mut fake_first : Int? = None
+  for i, para in paras {
+    let text = para.text().trim()
+    if text.is_empty() || text.length() > 30 {
+      continue
+    }
+    match para.heading_level() {
+      Some(_) => continue
+      None => ()
+    }
+    let centered = match para.props().alignment {
+      Some(a) => a == "center"
+      None => false
+    }
+    if !centered {
+      continue
+    }
+    let mut bold = false
+    let mut seen = false
+    for run in para.runs() {
+      if seen || run.is_textless() {
+        continue
+      }
+      seen = true
+      match run.props().bold {
+        Some(true) => bold = true
+        _ => ()
+      }
+    }
+    if !bold || text.length() > 25 {
+      continue
+    }
+    fake_count = fake_count + 1
+    match fake_first {
+      Some(_) => ()
+      None => fake_first = Some(i)
+    }
+  }
+  if fake_count > 0 {
+    out.push(Issue::new(
+      "fake_heading",
+      Warn,
+      "有 " +
+      fake_count.to_string() +
+      " 个段落靠居中加粗伪装成标题（未使用标题样式），目录与导航会漏掉它们",
+      fake_first,
+      fake_count,
+    ))
+  }
   // Placeholders that were never filled in.
   let mut placeholder_count = 0
   let mut placeholder_first : Int? = None
