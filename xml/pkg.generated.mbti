@@ -1,0 +1,147 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "niuniu513/docx-mbt/xml"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn document_to_string(Document) -> String
+
+pub fn escape_attr(String) -> String
+
+pub fn escape_text(String) -> String
+
+pub let ns_a : String
+
+pub let ns_cp : String
+
+pub let ns_ct : String
+
+pub let ns_dc : String
+
+pub let ns_dcterms : String
+
+pub let ns_m : String
+
+pub let ns_mc : String
+
+pub let ns_o : String
+
+pub let ns_pic : String
+
+pub let ns_r : String
+
+pub let ns_rel_pkg : String
+
+pub let ns_v : String
+
+pub let ns_w : String
+
+pub let ns_w14 : String
+
+pub let ns_w15 : String
+
+pub let ns_wp : String
+
+pub let ns_xml : String
+
+pub fn parse(StringView) -> Document raise XmlError
+
+pub fn parse_element(StringView) -> Element raise XmlError
+
+pub fn parse_fragment(StringView) -> Element raise XmlError
+
+pub fn prefix_for(String) -> String
+
+pub fn to_string(Element) -> String
+
+pub fn to_string_pretty(Element) -> String
+
+pub fn unescape(String) -> String
+
+pub fn write_element(Element, StringBuilder) -> Unit
+
+// Errors
+pub suberror XmlError {
+  XmlError(String)
+}
+
+// Types and methods
+#derive(@debug.Debug)
+pub struct Attr {
+  qname : String
+  ns : String
+  local_name : String
+  value : String
+}
+
+type Cursor
+
+pub struct Document {
+  decl : String
+  root : Element
+}
+pub fn Document::declaration(Self) -> String
+pub fn Document::root(Self) -> Element
+
+#derive(@debug.Debug)
+pub struct Element {
+  uid : Int32
+  qname : String
+  ns : String
+  local_name : String
+  attrs : Array[Attr]
+  children : Array[XmlNode]
+}
+pub fn Element::append(Self, Self) -> Unit
+pub fn Element::attr(Self, StringView) -> String?
+pub fn Element::attr_bool(Self, StringView) -> Bool
+pub fn Element::attr_int(Self, StringView) -> Int32?
+pub fn Element::attr_or(Self, StringView, String) -> String
+pub fn Element::attributes(Self) -> Array[Attr]
+pub fn Element::child(Self, String, String) -> Self?
+pub fn Element::child_count(Self) -> Int32
+pub fn Element::children_in(Self, String) -> Array[Self]
+pub fn Element::copy(Self) -> Self
+pub fn Element::elements(Self) -> Array[Self]
+pub fn Element::find_all(Self, (Self) -> Bool) -> Array[Self]
+pub fn Element::find_all_ns(Self, String, String) -> Array[Self]
+pub fn Element::find_all_w(Self, String) -> Array[Self]
+pub fn Element::find_ns(Self, String, String) -> Self?
+pub fn Element::find_w(Self, String) -> Self?
+pub fn Element::id(Self) -> Int32
+pub fn Element::index_of(Self, Self) -> Int32
+pub fn Element::insert_at(Self, Int32, XmlNode) -> Unit
+pub fn Element::is_empty(Self) -> Bool
+pub fn Element::is_ns(Self, StringView, StringView) -> Bool
+pub fn Element::is_w(Self, StringView) -> Bool
+pub fn Element::local(Self) -> String
+pub fn Element::make(String, String) -> Self
+pub fn Element::namespace(Self) -> String
+pub fn Element::nodes(Self) -> Array[XmlNode]
+pub fn Element::own_text(Self) -> String
+pub fn Element::push(Self, XmlNode) -> Unit
+pub fn Element::qname(Self) -> String
+pub fn Element::remove_at(Self, Int32) -> Bool
+pub fn Element::remove_attr(Self, String) -> Bool
+pub fn Element::set_attr(Self, String, String) -> Unit
+pub fn Element::set_attr_ns(Self, String, String, String, String) -> Unit
+pub fn Element::set_children(Self, Array[XmlNode]) -> Unit
+pub fn Element::text(Self) -> String
+pub fn Element::w_child(Self, String) -> Self?
+pub fn Element::w_children(Self, String) -> Array[Self]
+
+type RawAttr
+
+#derive(@debug.Debug)
+pub(all) enum XmlNode {
+  Elem(Element)
+  Text(String)
+  Comment(String)
+  Pi(String)
+}
+
+// Type aliases
+
+// Traits
